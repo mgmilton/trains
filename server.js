@@ -53,6 +53,7 @@ const checkAuth = (request, response) => {
   if (!token){
     response.status(403).json({error: "You must be authorized to use this endpoint"})
   } else {
+    let decoded;
     try {
       let decoded = jwt.verify(token, app.get('secretKey'));
   } catch(err) {
@@ -61,17 +62,18 @@ const checkAuth = (request, response) => {
     } else {
       response.status(403).json({error: "Invalid Token"})
     }
-  }};
+  }
+  };
 };
 
-app.patch('/api/v1/trains/:id', (request, response) => {
+app.patch('/api/v1/trains/:id', (request, response, next) => {
   const train = request.body.train;
   const { id } = request.params;
   const index = app.locals.trains.findIndex((m) => m.id == id);
 
   if (index === -1) { return response.status(404);}
   else {
-    checkAuth(request, response);
+    checkAuth(request, response, next);
   }
 
   const originalTrain = app.locals.trains[index];
