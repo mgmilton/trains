@@ -59,7 +59,7 @@ const checkAuth = (request, response) => {
     if (err.message === 'jwt expired'){
       response.status(403).json({error: "Expired Token"})
     } else {
-      return response.status(403).json({error: "Invalid Token"})
+      response.status(403).json({error: "Invalid Token"})
     }
   }};
 };
