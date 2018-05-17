@@ -48,22 +48,24 @@ app.post('/authenticate', (request, response) => {
   response.status(201).json({token});
 });
 
-var checkAuth = (request) => {
+const checkAuth = (request) => {
   var token = request.body.token;
-  if (token.length === 0){
+  if (token.length === 0 || token.undefined){
     response.status(403).json({error: "You must be authorized to use this endpoint"})
   } else {
     jwt.verify(token, app.get('secretKey'))
   };
 };
 
-app.patch('/api/v1/trains/:id', (request, response, next) => {
+app.patch('/api/v1/trains/:id', (request, response) => {
   const train = request.body;
   const { id } = request.params;
   const index = app.locals.trains.findIndex((m) => m.id == id);
 
   if (index === -1) { return response.status(404);}
-  else {next(checkAuth(request));}
+  else {
+    checkAuth(request);
+  }
 
   const originalTrain = app.locals.trains[index];
   app.locals.trains[index] = Object.assign(originalTrain, train);
