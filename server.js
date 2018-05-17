@@ -44,7 +44,8 @@ app.post('/authenticate', (request, response) => {
                   email: body.email,
                   appName: body.appName
                 }, app.get('secretKey'), { expiresIn: '48h' });
-  response.status(200).json(token);
+
+  response.status(201).json({token});
 });
 
 app.patch('/api/v1/trains/:id', (request, response) => {
