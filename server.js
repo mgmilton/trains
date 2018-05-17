@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 
 app.set('secretKey', 'wallaby');
 
-console.log(app.get('secretKey'));
+app.get('secretKey');
 
 // =================================================================
 // API Endpoints ===================================================
@@ -36,6 +36,15 @@ console.log(app.get('secretKey'));
 
 app.get('/api/v1/trains', (request, response) => {
   response.status(200).json(app.locals.trains);
+});
+
+app.post('/authenticate', (request, response) => {
+  var body = request.body;
+  var token = jwt.sign({
+                  email: body.email,
+                  appName: body.appName
+                }, app.get('secretKey'), { expiresIn: '48h' });
+  response.status(200).json(token);
 });
 
 app.patch('/api/v1/trains/:id', (request, response) => {
