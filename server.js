@@ -49,7 +49,12 @@ app.post('/authenticate', (request, response) => {
 });
 
 var checkAuth = function(){
-  console.log('hello my lovely wallaby')
+  var token = request.body.token;
+  if (token.length === 0){
+    response.status(403).json({error: "You must be authorized to use this endpoint"})
+  } else {
+    jwt.verify(token, app.get('secretKey'))
+  };
 };
 
 app.patch('/api/v1/trains/:id', (request, response, next) => {
@@ -57,7 +62,8 @@ app.patch('/api/v1/trains/:id', (request, response, next) => {
   const { id } = request.params;
   const index = app.locals.trains.findIndex((m) => m.id == id);
 
-  if (index === -1) { return response.status(404); }
+  if (index === -1) { return response.status(404);}
+  else {next(checkAuth());}
 
   const originalTrain = app.locals.trains[index];
   app.locals.trains[index] = Object.assign(originalTrain, train);
