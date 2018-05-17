@@ -48,23 +48,30 @@ app.post('/authenticate', (request, response) => {
   response.status(201).json({token});
 });
 
-const checkAuth = (request) => {
+const checkAuth = (request, response) => {
   var token = request.body.token;
-  if (token.length === 0 || token.undefined){
+  if (!token){
     response.status(403).json({error: "You must be authorized to use this endpoint"})
   } else {
-    jwt.verify(token, app.get('secretKey'))
-  };
+    try {
+      let decoded = jwt.verify(token, app.get('secretKey'));
+  } catch(err) {
+    if (err.message === 'jwt expired'){
+      response.status(403).json({error: "Expired Token"})
+    } else {
+      return response.status(403).json({error: "Invalid Token"})
+    }
+  }};
 };
 
 app.patch('/api/v1/trains/:id', (request, response) => {
-  const train = request.body;
+  const train = request.body.train;
   const { id } = request.params;
   const index = app.locals.trains.findIndex((m) => m.id == id);
 
   if (index === -1) { return response.status(404);}
   else {
-    checkAuth(request);
+    checkAuth(request, response);
   }
 
   const originalTrain = app.locals.trains[index];
