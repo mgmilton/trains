@@ -48,7 +48,7 @@ app.post('/authenticate', (request, response) => {
   response.status(201).json({token});
 });
 
-var checkAuth = function(){
+var checkAuth = () => {
   var token = request.body.token;
   if (token.length === 0){
     response.status(403).json({error: "You must be authorized to use this endpoint"})
