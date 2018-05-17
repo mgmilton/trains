@@ -48,7 +48,11 @@ app.post('/authenticate', (request, response) => {
   response.status(201).json({token});
 });
 
-app.patch('/api/v1/trains/:id', (request, response) => {
+var checkAuth = function(){
+  console.log('hello my lovely wallaby')
+};
+
+app.patch('/api/v1/trains/:id', (request, response, next) => {
   const train = request.body;
   const { id } = request.params;
   const index = app.locals.trains.findIndex((m) => m.id == id);
