@@ -26,7 +26,7 @@ app.locals.trains = [
 app.use(bodyParser.json());
 
 
-app.set('')
+app.set('secretKey', 'wallaby');
 
 // =================================================================
 // API Endpoints ===================================================
