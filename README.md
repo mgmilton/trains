@@ -1,3 +1,3 @@
 # Trains
 
-- A practice tutorial on creating JSON web tokens.
+- A tutorial on creating JSON web tokens.
